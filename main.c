@@ -41,7 +41,7 @@ void	draw_to_image(t_win *win)
 	int		endian;
 	int		offset;
 	
-	bpp = 32;
+	bpp = 32; 
 	size_len = 4 * 800;
 	endian = 0;
 	win->img = mlx_new_image(win->mlx, 800, 600);

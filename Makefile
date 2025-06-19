@@ -2,6 +2,8 @@ NAME = fdf
 
 CC = cc
 
+OBJ_DIR = objects/
+
 INCLUDE = -I./minilibx-linux -I./libft
 
 LIBS = -L./minilibx-linux -lmlx -lXext -lX11 -lm
@@ -10,16 +12,19 @@ CFLAGS = -Wall -Wextra -Werror -g $(INCLUDE)
 
 HEADERS = fdf.h libft/libft.h
 
-SOURCES = main.c
+SOURCES = main.c utils.c
 
-OBJECTS = $(SOURCES:.c=.o)
+OBJECTS = $($(OBJ_DIR)SOURCES:.c=.o)
 
 LIBFT = libft/libft.a
 
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(SOURCES) $(HEADERS)
-	$(CC) $(CFLAGS) -g $(SOURCES) $(LIBFT) -o $(NAME) $(LIBS)
+$(NAME): $(LIBFT) $(OBJECTS) $(HEADERS)
+	$(CC) $(OBJECTS) $(LIBFT) $(LIBS) -o $(NAME)
+
+$(OBJ_DIR)%.o: %.c
+	$(CC) $(CFLAGS) -o $@ -c $^
 
 $(LIBFT):
 	make -C libft

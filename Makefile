@@ -2,9 +2,11 @@ NAME = fdf
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -lmlx -lXext -lX11
+INCLUDE = -I./minilibx-linux -I./libft
 
-INCLUDE = -L
+LIBS = -L./minilibx-linux -lmlx -lXext -lX11 -lm
+
+CFLAGS = -Wall -Wextra -Werror -g $(INCLUDE)
 
 HEADERS = fdf.h libft/libft.h
 
@@ -17,7 +19,7 @@ LIBFT = libft/libft.a
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(SOURCES) $(HEADERS)
-	$(CC) $(CFLAGS) -g $(SOURCES) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) -g $(SOURCES) $(LIBFT) -o $(NAME) $(LIBS)
 
 $(LIBFT):
 	make -C libft

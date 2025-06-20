@@ -15,20 +15,23 @@ SOURCES =	ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c ft_isascii.
 			ft_write_types.c ft_write_types2.c get_next_line.c get_next_line_utils.c \
 			ft_malloc.c
 
-OBJECTS = $(SOURCES:.c=.o)
+OBJ_DIR = objects/
+
+OBJECTS = $(SOURCES:%.c=$(OBJ_DIR)%.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJECTS)
 	ar rcs $(NAME) $(OBJECTS)
 
-%.o: %.c
+$(OBJ_DIR)%.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:
 	rm -rf $(OBJECTS)
 
-fclean: clean
+fclean:
+	rm -rf $(OBJECTS)
 	rm -rf $(NAME)
 
 re: fclean all

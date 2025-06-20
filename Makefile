@@ -14,21 +14,21 @@ HEADERS = fdf.h libft/libft.h
 
 SOURCES = main.c utils.c
 
-OBJECTS = $($(OBJ_DIR)SOURCES:.c=.o)
+OBJECTS = $(SOURCES:%.c=$(OBJ_DIR)%.o)
 
 LIBFT = libft/libft.a
 
 all: $(NAME)
+	./fdf
 
 $(NAME): $(LIBFT) $(OBJECTS) $(HEADERS)
 	$(CC) $(OBJECTS) $(LIBFT) $(LIBS) -o $(NAME)
 
-$(OBJ_DIR)%.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $^
-
 $(LIBFT):
 	make -C libft
-	make clean -C libft
+
+$(OBJ_DIR)%.o: %.c
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:
 	rm -rf $(OBJECTS)

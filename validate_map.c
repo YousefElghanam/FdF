@@ -6,8 +6,13 @@ static void	validate_nums(char **arr)
 	
 	i = 0;
 	while (arr[i++])
+	{
 		if (!is_valid_int(arr[i - 1]))
+		{
+			ft_printf("num str is: %s\n", arr[i - 1]);
 			return_error(4);
+		}
+	}
 }
 
 void	split_validate_line(char *line, size_t *base_width)
@@ -39,6 +44,7 @@ void	validate_map(int fd)
 	check_add_ptr(line, 1, 4);
 	while (line)
 	{
+		ft_printf("line is: %s\n", line);
 		split_validate_line(line, &base_width);
 		line = get_next_line(fd);
 	}

@@ -4,7 +4,7 @@ CC = cc
 
 OBJ_DIR = objects/
 
-INCLUDE = -I./minilibx-linux -I./libft
+INCLUDE = -I./minilibx-linux
 
 LIBS = -L./minilibx-linux -lmlx -lXext -lX11 -lm
 
@@ -12,14 +12,13 @@ CFLAGS = -Wall -Wextra -Werror -g $(INCLUDE)
 
 HEADERS = fdf.h libft/libft.h
 
-SOURCES = main.c utils.c
+SOURCES = main.c utils.c validate_map.c parse_map.c
 
 OBJECTS = $(SOURCES:%.c=$(OBJ_DIR)%.o)
 
 LIBFT = libft/libft.a
 
 all: $(NAME)
-	./fdf
 
 $(NAME): $(LIBFT) $(OBJECTS) $(HEADERS)
 	$(CC) $(OBJECTS) $(LIBFT) $(LIBS) -o $(NAME)

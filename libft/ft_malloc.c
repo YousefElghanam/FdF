@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 12:06:43 by jel-ghna          #+#    #+#             */
-/*   Updated: 2025/06/18 22:07:06 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2025/06/21 22:02:44 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,39 +20,47 @@ void	ft_delete(void *ptr)
 void	return_error(int state, ...)
 {
 	t_list	**list;
+	t_list	**list2;
 
-	list = ft_alloc_list();
+	list = ft_alloc_list(0);
+	list2 = ft_alloc_list(1);
 	if (state == 0)
 		;
 	else if (state == 1)
 		write(2, "Error\n", 6);
 	else if (state == 2)
 		write(1, "KO\n", 3);
+	else if (state == 3)
+		write(1, "Invalid Map File\n", 17);
+	else if (state == 4)
+		write(1, "Invalid Map\n", 12);
 	ft_lstclear(list, &ft_delete);
+	ft_lstclear(list2, &ft_delete);
 	free(list);
+	free(list2);
 	exit(1);
 }
 
-t_list	**ft_alloc_list(void)
+t_list	**ft_alloc_list(int list_num)
 {
-	static t_list	**ptr;
+	static t_list	**(ptr[2]);
 
-	if (ptr == NULL)
+	if (ptr[list_num] == NULL)
 	{
-		ptr = malloc(sizeof(t_list *));
-		if (!ptr)
+		ptr[list_num] = malloc(sizeof(t_list *));
+		if (!ptr[list_num])
 			exit(1);
-		*ptr = NULL;
+		*(ptr[list_num]) = NULL;
 	}
-	return (ptr);
+	return (ptr[list_num]);
 }
 
-void	ft_add_address(void *ptr)
+void	ft_add_address(void *ptr, int list_num)
 {
 	void	*node;
 	t_list	**list;
 
-	list = ft_alloc_list();
+	list = ft_alloc_list(list_num);
 	node = ft_lstnew(ptr);
 	if (!node)
 	{
@@ -62,15 +70,15 @@ void	ft_add_address(void *ptr)
 	ft_lstadd_back(list, node);
 }
 
-void	*ft_malloc(size_t size)
+void	*ft_malloc(size_t size, int list_num)
 {
 	void	*ptr;
 	t_list	**list;
 
-	list = ft_alloc_list();
+	list = ft_alloc_list(list_num);
 	ptr = malloc(size);
 	if (!ptr)
 		return (ft_lstclear(list, &ft_delete), NULL);
-	ft_add_address(ptr);
+	ft_add_address(ptr, list_num);
 	return (ptr);
 }

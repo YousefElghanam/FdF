@@ -34,31 +34,27 @@ int	draw_to_image(t_win *win)
 	i = -1;
 	img.pixels = mlx_get_data_addr(win->img, &img.bpp, &img.size_len, &img.endian);
 	ft_memset(img.pixels, 0xFF, img.size_len * HEIGHT);
-	offset = (450 * img.size_len) + (0 * img.bpp/8);
-	while (i++ < img.size_len)
+	offset = ((HEIGHT / 4) * img.size_len) + (0 * img.bpp/8);
+	while (i < img.size_len * HEIGHT / 2)
 	{
-		img.pixels[offset + 0] = (char)0x55; //mlx_get_color_value(win->mlx, 0x1155); //(char)0x00;
-		img.pixels[offset + 1] = (char)0x55; //mlx_get_color_value(win->mlx, 0x2255);
-		img.pixels[offset + 2] = (char)0x55; //mlx_get_color_value(win->mlx, 0x2255);
-		img.pixels[offset + 3] = (char)0x55; //mlx_get_color_value(win->mlx, 0x00);
+		*(unsigned int *)(img.pixels + i + offset) = 0x00FFFF00;
+		i += 4;
 	}
-	//mlx_get_color_value(win->mlx, 0x00FF0000);
-	// *((unsigned int *)(pixels + offset)) = 0x00FFFFFF;
-	// pixels[offset + 4] = mlx_get_color_value(win->mlx, 0x0000FF);
-	// pixels[offset + 8] = mlx_get_color_value(win->mlx, 0x0000FF);
 	mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
 	return (1);
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_win	win;
+	t_map	*map;
 
-	if (!ft_alloc_list())
+	if (!ft_alloc_list(0))
 		return_error(1);
+	map = read_map(argc, argv);
 	win.mlx = mlx_init();
-	win.win = mlx_new_window(win.mlx, 1600, 900, "Test: FdF");
-	win.img = mlx_new_image(win.mlx, 1600, 900);
+	win.win = mlx_new_window(win.mlx, WIDTH, HEIGHT, "Test: FdF");
+	win.img = mlx_new_image(win.mlx, WIDTH, HEIGHT);
 
 	mlx_loop_hook(win.mlx, draw_to_image, &win);
 	mlx_key_hook(win.win, key_win, &win);

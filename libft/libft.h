@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:54:09 by josefelghna       #+#    #+#             */
-/*   Updated: 2025/06/14 21:43:47 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2025/06/21 22:31:38 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
-void	*ft_malloc(size_t size);
-void	ft_add_address(void *ptr);
-t_list	**ft_alloc_list(void);
+void	*ft_malloc(size_t size, int list_num);
+void	ft_add_address(void *ptr, int list_num);
+t_list	**ft_alloc_list(int list_num);
 void	ft_delete(void *ptr);
 void	return_error(int state, ...);
 
@@ -35,6 +35,7 @@ int		ft_printf(const char *format, ...);
 t_list	*ft_lstnew_ft_malloc(void *content);
 
 int		ft_atoi(const char *nptr);
+long	ft_atoi_but_better(const char *nptr);
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_isalnum(int c);

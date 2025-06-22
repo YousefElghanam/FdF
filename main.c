@@ -53,6 +53,7 @@ int	main(int argc, char **argv)
 		return_error(1);
 	map = read_map(argc, argv);
 	win.mlx = mlx_init();
+	ft_add_address(win.mlx, 0);
 	win.win = mlx_new_window(win.mlx, WIDTH, HEIGHT, "Test: FdF");
 	win.img = mlx_new_image(win.mlx, WIDTH, HEIGHT);
 

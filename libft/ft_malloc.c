@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 12:06:43 by jel-ghna          #+#    #+#             */
-/*   Updated: 2025/06/21 22:02:44 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2025/06/22 16:40:28 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,33 +17,31 @@ void	ft_delete(void *ptr)
 	free(ptr);
 }
 
+// TODO: RECHECK WHETER TO OUTPUT TO STDERR OR STDOUT
 void	return_error(int state, ...)
 {
-	t_list	**list;
-	t_list	**list2;
-
-	list = ft_alloc_list(0);
-	list2 = ft_alloc_list(1);
-	if (state == 0)
-		;
-	else if (state == 1)
+	if (state == 1)
 		write(2, "Error\n", 6);
 	else if (state == 2)
 		write(1, "KO\n", 3);
 	else if (state == 3)
-		write(1, "Invalid Map File\n", 17);
+		write(1, "Invalid Map File.\n", 17);
 	else if (state == 4)
 		write(1, "Invalid Map\n", 12);
-	ft_lstclear(list, &ft_delete);
-	ft_lstclear(list2, &ft_delete);
-	free(list);
-	free(list2);
+	else if (state == 5)
+		write(1, "No arguments given. Usage: (./fdf \"map.fdf\")\n", 45);
+	ft_lstclear(ft_alloc_list(0), &ft_delete);
+	ft_lstclear(ft_alloc_list(1), &ft_delete);
+	free(ft_alloc_list(0));
+	free(ft_alloc_list(1));
+	if (state == 0)
+		exit(0);
 	exit(1);
 }
 
 t_list	**ft_alloc_list(int list_num)
 {
-	static t_list	**(ptr[2]);
+	static	t_list	**(ptr[2]);
 
 	if (ptr[list_num] == NULL)
 	{

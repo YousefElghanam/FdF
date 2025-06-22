@@ -8,7 +8,7 @@ static int	open_validate_file(int argc, char **argv)
 	int		fd;
 
 	if (argc < 2)
-		return_error(3);
+		return_error(5);
 	file = argv[1];
 	file_len = ft_strlen(file);
 	if (file_len < 5)

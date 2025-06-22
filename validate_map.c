@@ -3,9 +3,9 @@
 static void	validate_nums(char **arr)
 {
 	size_t	i;
-	
+
 	i = 0;
-	while (arr[i] && arr[i][0] != '\n')
+	while (arr[i] && arr[i][ft_strlen(arr[i]) - 1] != '\n')
 	{
 		if (!is_valid_int(arr[i]))
 			return_error(4);
@@ -19,8 +19,7 @@ static void	validate_line(char *line)
 
 	line_len = ft_strlen(line);
 	if (line_len < 3
-		|| line[line_len - 1] != '\n'
-		|| line[line_len - 2] != ' ')
+		|| line[line_len - 1] != '\n')
 		return_error(4);
 }
 
@@ -32,6 +31,8 @@ static void	split_validate_line(char *line, size_t *base_width)
 	validate_line(line);
 	string_arr = ft_split(line, ' ');
 	width = count_strings(string_arr) - 1; // ( - 1 ) FOR THE '\n'
+	if (ft_strchr(string_arr[width], '\n'))
+		string_arr[width][ft_strlen(string_arr[width]) - 1] = 0; 
 	add_split_ptrs(string_arr, 1);
 	if (*base_width == 0)
 		*base_width = width;

@@ -1,10 +1,11 @@
 #include "fdf.h"
 
-void	check_add_ptr(void *ptr, int list_num, int error_num)
+void	*check_add_ptr(void *ptr, int list_num, int error_num)
 {
 	if (!ptr)
 		return_error(error_num);
 	ft_add_address(ptr, list_num);
+	return (ptr);
 }
 
 size_t	count_strings(char **arr)
@@ -36,15 +37,15 @@ int	is_valid_int(char *str)
 	return (1);
 }
 
-void	add_split_ptrs(char **arr)
+void	add_split_ptrs(char **arr, int list_num)
 {
 	size_t	i;
 
 	i = 0;
-	check_add_ptr(arr, 1, 1);
+	check_add_ptr(arr, list_num, 1);
 	while (arr[i])
 	{
-		ft_add_address(arr[i], 1);
+		ft_add_address(arr[i], list_num);
 		i++;
 	}
 }

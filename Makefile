@@ -12,7 +12,7 @@ CFLAGS = -Wall -Wextra -Werror -g $(INCLUDE)
 
 HEADERS = fdf.h libft/libft.h
 
-SOURCES = main.c utils.c validate_map.c parse_map.c
+SOURCES = main.c utils.c validate_map.c read_map.c parse_map.c
 
 OBJECTS = $(SOURCES:%.c=$(OBJ_DIR)%.o)
 

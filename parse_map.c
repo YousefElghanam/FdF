@@ -3,17 +3,25 @@
 static t_point	*new_point(size_t x, size_t y, char *num_string)
 {
 	t_point	*point;
+	char	*color;
 
 	point = ft_malloc(sizeof(t_point), 0);
 	if (!point)
 		return_error(1);
+	if (ft_strchr(num_string, ','))
+	{
+		color = ft_strchr(num_string, ',') + 3;
+		point->color = ft_atoi_base(color, "0123456789abcdef"); // TODO: This only accepts lowercase hex
+	}
+	else
+		point->color = 0xFFFFFF;
 	point->x = x;
 	point->y = y;
 	point->z = ft_atoi(num_string);
 	return (point);
 }
 
-static void	add_line_points(t_map *map, size_t y, char *line)
+static void	store_points_from_line(t_map *map, size_t y, char *line)
 {
 	char	**string_arr;
 	t_point	*point;
@@ -23,7 +31,7 @@ static void	add_line_points(t_map *map, size_t y, char *line)
 
 	string_arr = ft_split(line, ' ');
 	add_split_ptrs(string_arr, 1);
-	width = count_strings(string_arr) - 1;
+	width = count_strings(string_arr);
 	map->width = width;
 	point_arr = ft_malloc(sizeof(t_point *) * width, 0);
 	if (!point_arr)
@@ -48,8 +56,9 @@ static void	store_points(t_map *map, int fd, size_t line_count)
 	while (y < line_count)
 	{
 		line = get_next_line(fd);
+		line[ft_strlen(line) - 1] = '\0';
 		check_add_ptr(line, 1, 1);
-		add_line_points(map, y, line);
+		store_points_from_line(map, y, line);
 		y++;
 	}
 }

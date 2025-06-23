@@ -20,12 +20,23 @@ size_t	count_strings(char **arr)
 
 size_t	ft_strlen_till_comma(char *str)
 {
-	if (ft_strchr(str, ',') == NULL)
-		return(ft_strlen(str));
-	else if ((size_t)(ft_strchr(str, ',') - str) == 0)
+	size_t	i;
+
+	i = 0;
+	if (str[i] == ',')
 		return_error(4);
-	return ((size_t)(ft_strchr(str, ',') - str));
+	while (str[i] && str[i] != ',')
+		i++;
+	return (i);
 }
+
+// int	valid_base(char *str) // TODO: Check hex consitency (not mixing uppercase and lowercase). Also recheck we really need this
+// {
+// 	int	type;
+
+// 	type = 0;
+// 	while 
+// }
 
 int	is_valid_hex(char *str)
 {
@@ -33,15 +44,19 @@ int	is_valid_hex(char *str)
 	char	c;
 
 	i = 2;
-	if (ft_strlen(str) < 3 || ft_strlen(str) > 10)
+	if (ft_strlen(str) > 10)
 		return (0);
-	if (str[0] != '0' || str[1] != 'x')
+	if (str[0] != '0' || (str[1] != 'X' && str[1] != 'x'))
 		return (0);
+	if (str[2] == 0)
+		return (0);
+	// if (!valid_base(str))
+	// 	return (0);
 	while (str[i])
 	{
 		c = str[i];
 		if (!ft_isdigit(c)
-			|| !(('A' <= c && c <= 'F') || ('a' <= c && c <= 'f')))
+			&& !(('A' <= c && c <= 'F') || ('a' <= c && c <= 'f')))
 			return (0);
 		i++;
 	}
@@ -52,13 +67,12 @@ void	validate_color_hex(char *str, size_t strlen)
 {
 	char	*color;
 
-	color = ft_substr(str, strlen + 1, ft_strlen(str) - strlen);
-	check_add_ptr(color, 1, 1);
-	if (ft_strchr(color, ',') && !is_valid_hex(color))
+	color = str + strlen + 1;
+	if (!is_valid_hex(color))
 		return_error(4);
 }
 
-int	is_valid_int(char *str)
+int	is_valid_point(char *str)
 {
 	size_t	i;
 	size_t	strlen;
@@ -73,10 +87,8 @@ int	is_valid_int(char *str)
 	while (i < strlen)
 		if (!ft_isdigit(str[i++]))
 			return (0);
-	if (ft_strchr(str, ','))
+	if (str[i] == ',')
 		validate_color_hex(str, strlen);
-	num = ft_substr(str, 0, strlen);
-	check_add_ptr(num, 1, 1);
 	if (ft_atoi_but_better(num) == 2147483648)
 		return (0);
 	return (1);

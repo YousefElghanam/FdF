@@ -37,7 +37,7 @@ typedef struct s_win
 }	t_win;
 
 /* utils.c */
-int		is_valid_int(char *str);
+int		is_valid_point(char *str);
 size_t	count_strings(char **arr);
 void	*check_add_ptr(void *ptr, int list_num, int error_num);
 void	add_split_ptrs(char **arr, int list_num);
@@ -49,4 +49,4 @@ t_map	*read_map(int argc, char **argv);
 int	open_parse_map(t_map *map, char **argv, size_t line_count);
 
 /* validate_map.c */
-size_t	validate_map_count_points(int fd);
+size_t	validate_map(int fd);

@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 20:17:04 by josefelghna       #+#    #+#             */
-/*   Updated: 2025/06/23 23:14:17 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2025/06/24 17:38:24 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,26 +72,28 @@ long	ft_atoi_but_better(const char *nptr)
 	return (res * sign);
 }
 
-int	ft_atoi_base(char *str, char *base)
+int	ft_hextoi_base(char *str, char *base)
 {
 	int		i;
 	int		j;
 	int		sign;
 	int		res;
+	char	*upper_base;
 
 	sign = 1;
 	i = -1;
 	res = 0;
-	while ((9 <= str[++i] && str[i] <= 13) || str[i] == ' ')
-		;
-	i--;
-	while (str[++i] == '-' || str[i] == '+')
-		if (str[i] == '-')
+	upper_base = "0123456789ABCDEF";
+	if ((str[++i] == '-' || str[i] == '+'))
+		if (str[i++] == '-')
 			sign = -sign;
-	while (ft_strchr(base, str[i]))
+	i += 2;
+	while (str[i] && (ft_strchr(base, str[i])
+			|| ft_strchr(base, ft_tolower(str[i]))))
 	{
+		ft_printf("%c", str[i]);
 		j = 0;
-		while (base[j] != str[i])
+		while (base[j] != str[i] && base[j] != ft_tolower(str[i]))
 			j++;
 		res = res * (int)ft_strlen(base) + j;
 		i++;

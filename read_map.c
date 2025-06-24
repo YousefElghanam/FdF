@@ -52,6 +52,6 @@ t_map	*read_map(int argc, char **argv)
 	ft_printf("line count is: %d\n", line_count);
 	fd = open_parse_map(&map, argv, line_count);
 	close(fd);
-	test_map_parsing(&map);
+	// test_map_parsing(&map);
 	return(NULL);
 }

@@ -30,28 +30,22 @@ size_t	ft_strlen_till_comma(char *str)
 	return (i);
 }
 
-// int	valid_base(char *str) // TODO: Check hex consitency (not mixing uppercase and lowercase). Also recheck we really need this
-// {
-// 	int	type;
-
-// 	type = 0;
-// 	while 
-// }
-
 int	is_valid_hex(char *str)
 {
 	size_t	i;
 	char	c;
 
-	i = 2;
-	if (ft_strlen(str) > 10)
+	i = 0;
+	if (str[0] == '+' || str[0] == '-')
+		i++;
+	if (str[i++] != '0' || (str[i] != 'X' && str[i] != 'x'))
 		return (0);
-	if (str[0] != '0' || (str[1] != 'X' && str[1] != 'x'))
+	if (str[++i] == 0)
 		return (0);
-	if (str[2] == 0)
+	while (str[i] == '0')
+		i++;
+	if (ft_strlen(str + i) > 6 || ft_strlen(str) > 30)
 		return (0);
-	// if (!valid_base(str))
-	// 	return (0);
 	while (str[i])
 	{
 		c = str[i];
@@ -76,7 +70,6 @@ int	is_valid_point(char *str)
 {
 	size_t	i;
 	size_t	strlen;
-	char	*num;
 
 	i = 0;
 	if (*str == 0)
@@ -89,7 +82,7 @@ int	is_valid_point(char *str)
 			return (0);
 	if (str[i] == ',')
 		validate_color_hex(str, strlen);
-	if (ft_atoi_but_better(num) == 2147483648)
+	if (ft_atoi_but_better(str) == 2147483648)
 		return (0);
 	return (1);
 }

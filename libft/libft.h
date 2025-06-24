@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:54:09 by josefelghna       #+#    #+#             */
-/*   Updated: 2025/06/23 22:51:59 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2025/06/24 15:30:27 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_list	*ft_lstnew_ft_malloc(void *content);
 
 int		ft_atoi(const char *nptr);
 long	ft_atoi_but_better(const char *nptr);
-int		ft_atoi_base(char *str, char *base);
+int		ft_hextoi_base(char *str, char *base);
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_isalnum(int c);

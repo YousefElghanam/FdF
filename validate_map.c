@@ -51,5 +51,5 @@ size_t	validate_map(int fd)
 		ft_add_address(line, 1);
 	}
 	ft_lstclear(ft_alloc_list(1), &ft_delete);
-	return(line_count);
+	return (line_count);
 }

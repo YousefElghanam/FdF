@@ -10,8 +10,8 @@ static t_point	*new_point(size_t x, size_t y, char *num_string)
 		return_error(1);
 	if (ft_strchr(num_string, ','))
 	{
-		color = ft_strchr(num_string, ',') + 3;
-		point->color = ft_atoi_base(color, "0123456789abcdef"); // TODO: This only accepts lowercase hex
+		color = ft_strchr(num_string, ',') + 1;
+		point->color = ft_hextoi_base(color, "0123456789abcdef");
 	}
 	else
 		point->color = 0xFFFFFF;
@@ -41,6 +41,7 @@ static void	store_points_from_line(t_map *map, size_t y, char *line)
 	{
 		point = new_point(x, y, string_arr[x]);
 		point_arr[x] = point;
+		// ft_printf("point(%d,%d)\nx:%d\ny:%d\nz:%d\ncolor:%d\n\n", y, x, point->x, point->y, point->z, point->color);
 		x++;
 	}
 	(map->points)[y] = point_arr;

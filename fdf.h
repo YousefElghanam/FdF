@@ -46,7 +46,7 @@ void	add_split_ptrs(char **arr, int list_num);
 t_map	*read_map(int argc, char **argv);
 
 /* parse_map.c */
-int	open_parse_map(t_map *map, char **argv, size_t line_count);
+int		open_parse_map(t_map *map, char **argv, size_t line_count);
 
 /* validate_map.c */
 size_t	validate_map(int fd);

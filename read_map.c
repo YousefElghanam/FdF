@@ -42,16 +42,19 @@ void	test_map_parsing(t_map *map)
 
 t_map	*read_map(int argc, char **argv)
 {
-	t_map	map;
+	t_map	*map;
 	size_t	line_count;
 	int		fd;
 
 	fd = open_validate_file(argc, argv);
 	line_count = validate_map(fd);
+	map = ft_malloc(sizeof(t_map), 0);
+	if (!map)
+		return_error(1);
 	close(fd);
 	// ft_printf("line count is: %d\n", line_count);
-	fd = open_parse_map(&map, argv, line_count);
+	fd = open_parse_map(map, argv, line_count);
 	close(fd);
 	// test_map_parsing(&map);
-	return(NULL);
+	return(map);
 }

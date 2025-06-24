@@ -4,7 +4,7 @@
 #include "fcntl.h"
 
 #define WIDTH 1920
-#define HEIGHT 1080
+#define HEIGHT 1020
 
 typedef struct s_point
 {
@@ -33,7 +33,7 @@ typedef struct s_win
 {
 	void	*mlx;
 	void	*win;
-	void	*img;
+	t_img	*img;
 	t_map	*map;
 }	t_win;
 

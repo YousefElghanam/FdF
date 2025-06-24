@@ -33,7 +33,7 @@ int	draw_to_image(t_win *win)
 
 	i = -1;
 	img.pixels = mlx_get_data_addr(win->img, &img.bpp, &img.size_len, &img.endian);
-	ft_memset(img.pixels, 0xFF, img.size_len * HEIGHT);
+	ft_memset(img.pixels, 0x808080, img.size_len * HEIGHT);
 	offset = ((HEIGHT / 4) * img.size_len) + (0 * img.bpp/8);
 	while (i < img.size_len * HEIGHT / 2)
 	{
@@ -47,11 +47,10 @@ int	draw_to_image(t_win *win)
 int	main(int argc, char **argv)
 {
 	t_win	win;
-	t_map	*map;
 
 	if (!ft_alloc_list(0))
 		return_error(1);
-	map = read_map(argc, argv);
+	win.map = read_map(argc, argv);
 	win.mlx = mlx_init();
 	ft_add_address(win.mlx, 0);
 	win.win = mlx_new_window(win.mlx, WIDTH, HEIGHT, "Test: FdF");

@@ -49,7 +49,7 @@ t_map	*read_map(int argc, char **argv)
 	fd = open_validate_file(argc, argv);
 	line_count = validate_map(fd);
 	close(fd);
-	ft_printf("line count is: %d\n", line_count);
+	// ft_printf("line count is: %d\n", line_count);
 	fd = open_parse_map(&map, argv, line_count);
 	close(fd);
 	// test_map_parsing(&map);

@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 20:17:04 by josefelghna       #+#    #+#             */
-/*   Updated: 2025/06/24 17:38:24 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2025/06/24 17:54:23 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ int	ft_hextoi_base(char *str, char *base)
 	while (str[i] && (ft_strchr(base, str[i])
 			|| ft_strchr(base, ft_tolower(str[i]))))
 	{
-		ft_printf("%c", str[i]);
 		j = 0;
 		while (base[j] != str[i] && base[j] != ft_tolower(str[i]))
 			j++;

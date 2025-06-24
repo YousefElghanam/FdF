@@ -34,6 +34,7 @@ typedef struct s_win
 	void	*mlx;
 	void	*win;
 	void	*img;
+	t_map	*map;
 }	t_win;
 
 /* utils.c */

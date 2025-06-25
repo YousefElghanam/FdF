@@ -4,7 +4,14 @@
 #include "fcntl.h"
 
 #define WIDTH 1920
-#define HEIGHT 1020
+#define HEIGHT 1080
+
+typedef struct s_pixel
+{
+	int	x;
+	int	y;
+	int	color;
+}	t_pixel;
 
 typedef struct s_point
 {

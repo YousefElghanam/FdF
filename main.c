@@ -55,7 +55,7 @@ void	put_map_points(t_map *map, t_img *img)
 			// ft_printf("x:%d\ny:%d\nz:%d\ncolor:%d\n", point->x, point->y, point->z, point->color);
 			pixel->x = img->bpp/8 * ((x * sep) + 200);
 			pixel->color = point->color;
-			draw_line()
+			draw_line(img, );
 			// ft_printf("at pixel (%d,%d)\n\n", pixel->y / img->size_len, pixel->x / 4);
 			// check_inbound(); // This needs to be before changing the pixel (next)
 			*(unsigned int *)(img->pixels + pixel->y + pixel->x) = point->color;

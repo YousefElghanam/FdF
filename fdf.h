@@ -5,19 +5,37 @@
 
 #define WIDTH 1920
 #define HEIGHT 1080
+#define COS30 0.8660254f
+#define SIN30 0.5f
 
-typedef struct s_pixel
+typedef struct s_line
 {
-	int	x;
-	int	y;
-	int	color;
-}	t_pixel;
+	int	x1;
+	int	x2;
+	int	y1;
+	int	y2;
+	int	sx;
+	int	sy;
+	int	dx;
+	int	dy;
+	int	err;
+	int	e2;
+}	t_line;
+
+typedef struct s_raw
+{
+	float	x;
+	float	y;
+	float	z;
+}	t_raw;
 
 typedef struct s_point
 {
 	int	x;
 	int	y;
 	int	z;
+	int	pixel_x;
+	int	pixel_y;
 	int	color;
 }	t_point;
 
@@ -25,6 +43,14 @@ typedef struct s_map
 {
 	int		height;
 	int		width;
+	int		scale;
+	int		z_scale;
+	int		step_x;
+	int		step_y;
+	int		iso_x_x;
+	int		iso_x_y;
+	int		iso_y_x;
+	int		iso_y_y;
 	t_point	***points;
 }	t_map;
 
@@ -58,3 +84,6 @@ int		open_parse_map(t_map *map, char **argv, size_t line_count);
 
 /* validate_map.c */
 size_t	validate_map(int fd);
+
+/* main.c */
+int	draw_to_image(t_win *win);

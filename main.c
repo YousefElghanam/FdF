@@ -10,6 +10,42 @@ int	key_win(int key, t_win *win)
 		mlx_destroy_display(win->mlx);
 		return_error(0);
 	}
+	if (key == 65451)
+	{
+		win->map->scale += 1;
+		win->map->z_scale += 1;
+	}
+	if (key == 65453)
+	{
+		win->map->scale -= 1;
+		win->map->z_scale -= 1;
+	}
+	if (key == 65361)
+		win->map->step_x -= 50;
+	if (key == 65364)
+		win->map->step_y += 50;
+	if (key == 65363)
+		win->map->step_x += 50;
+	if (key == 65362)
+		win->map->step_y -= 50;
+	if (key == 65434)
+
+		win->map->iso_x_x += 1;
+	if (key == 65432)
+		win->map->iso_x_x -= 1;
+	if (key == 65431)
+		win->map->iso_x_y += 1;
+	if (key == 65437)
+		win->map->iso_x_y -= 1;
+	if (key == 65429)
+		win->map->iso_y_x += 1;
+	if (key == 65430)
+		win->map->iso_y_x -= 1;
+	if (key == 119)
+		win->map->iso_y_y += 1;
+	if (key == 115)
+		win->map->iso_y_y -= 1;
+	draw_to_image(win);
 	return (0);
 }
 
@@ -19,103 +55,153 @@ int	mouse_win(int button, int x, int y)
 	return (0);
 }
 
-int	expose_win(void)
+int	in_limit(t_map *map, int x, int y)
 {
-	ft_printf("hihihihi\n");
-	return (0);
+	return (x >= 0 && x < map->width && y >= 0 && y < map->height);
 }
 
-#define SCALE 10
-
-// void	put_pixel(t_img *img, t_pixel *p, int color);
-
-void	draw_line(t_img *img, t_pixel *p1, t_pixel *p2);
-
-void	put_map_points(t_map *map, t_img *img)
+int	sx(int x1, int x2)
 {
-	t_point	*point;
-	t_pixel	*pixel;
-	int		y;
-	int		x;
-	int		sep;
-	
+	if (x1 < x2)
+		return (1);
+	return (-1);
+}
+
+int	sy(int y1, int y2)
+{
+	if (y1 < y2)
+		return (1);	
+	return (-1);
+}
+
+void	dir_x(t_line *line)
+{
+	if (line->e2 > -line->dy)
+	{
+		line->err -= line->dy;
+		line->x1 += line->sx;
+	}
+}
+void	dir_y(t_line *line)
+{
+	if (line->e2 < line->dx)
+	{
+		line->err += line->dx;
+		line->y1 += line->sy;
+	}
+}
+
+void	draw_line(t_img *img, t_point *p1, t_point *p2)
+{
+	t_line	line;
+
+	line.x1 = p1->pixel_x;
+	line.y1 = p1->pixel_y;
+	line.x2 = p2->pixel_x;
+	line.y2 = p2->pixel_y;
+	line.dx = abs(line.x2 - p1->pixel_x);
+	line.dy = abs(line.y2 - p1->pixel_y);
+	line.sx = sx(line.x1, line.x2);
+	line.sy = sy(line.y1, line.y2);
+	line.err = line.dx - line.dy;
+	while (1)
+	{
+		if (line.x1 >= 0 && line.x1 < WIDTH && line.y1 >= 0 && line.y1 < HEIGHT)
+			*(unsigned int *)(img->pixels
+					+ line.y1 * img->size_len
+					+ line.x1 * (img->bpp / 8)) = p1->color;
+		if (line.x1 == line.x2 && line.y1 == line.y2)
+			break ;
+		line.e2 = 2 * line.err;
+		dir_x(&line);
+		dir_y(&line);
+	}
+}
+
+void	draw_lines(t_map *map, t_img *img)
+{
+	int	x;
+	int	y;
+
 	y = 0;
-	sep = 30;
-	pixel = ft_malloc(sizeof(t_pixel), 0);
-	if (!pixel)
-		return_error(1);
 	while (y < map->height)
-	{		//bytes per line V 					V y starting map pixel
-		pixel->y = img->size_len * ((y * sep) + 200);
+	{
 		x = 0;
 		while (x < map->width)
 		{
-			// ft_printf("x: %d\ny: %d\n\n", x, y);
-			point = map->points[y][x];
-			// ft_printf("x:%d\ny:%d\nz:%d\ncolor:%d\n", point->x, point->y, point->z, point->color);
-			pixel->x = img->bpp/8 * ((x * sep) + 200);
-			pixel->color = point->color;
-			draw_line(img, );
-			// ft_printf("at pixel (%d,%d)\n\n", pixel->y / img->size_len, pixel->x / 4);
-			// check_inbound(); // This needs to be before changing the pixel (next)
-			*(unsigned int *)(img->pixels + pixel->y + pixel->x) = point->color;
+			if (in_limit(map, x + 1, y))
+				draw_line(img, map->points[y][x], map->points[y][x + 1]);
+			if (in_limit(map, x, y + 1))
+				draw_line(img, map->points[y][x], map->points[y + 1][x]);
 			x++;
 		}
 		y++;
 	}
 }
 
-// void	put_map_points(t_win *win, t_img *img)
-// {
-// 	t_point	*point;
-// 	int		y;
-// 	int		x;
-// 	int		y_offset;
-// 	int		x_offset;
+void	points_to_pixels(t_map *map)
+{
+	t_raw	raw;
+	int		x;
+	int		y;
+	float	iso_x;
+	float	iso_y;
 	
-// 	y = 0;
-// 	while (y < win->map->height)
-// 	{
-// 		y_offset = img->size_len * y;
-// 		x = 0;
-// 		while (x < win->map->width)
-// 		{
-// 			// ft_printf("x: %d\ny: %d\n\n", x, y);
-// 			point = win->map->points[y][x];
-// 			ft_printf("x:%d\ny:%d\nz:%d\ncolor:%d\n", point->x, point->y, point->z, point->color);
-// 			x_offset = img->bpp/8 * (x);
-// 			ft_printf("at pixel (%d,%d)\n\n", y, x);
-// 			*(unsigned int *)(win->img->pixels + y_offset + x_offset) = point->z;
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// }
+	y = 0;
+	while (y < map->height)
+	{
+		x = 0;
+		while (x < map->width)
+		{
+			raw.x = x * map->scale;
+			raw.y = y * map->scale;
+			raw.z = map->points[y][x]->z * map->z_scale;
+			iso_x = ((raw.x * map->iso_x_x) - (raw.y * map->iso_x_y)) * COS30;
+			iso_y = ((raw.x * map->iso_y_x) + (raw.y * map->iso_y_y)) * SIN30 - raw.z;
+			(map->points[y][x])->pixel_x = (int)iso_x + 200 + map->step_x;
+			(map->points[y][x])->pixel_y = (int)iso_y + 200 + map->step_y;
+			x++;
+		}
+		y++;
+	}
+}
 
 int	draw_to_image(t_win *win)
 {
 	t_img	*img;
-	int		point1;
-	int		point2;
-	int		i;
 
-	i = -1;
 	img = ft_malloc(sizeof(t_img), 0);
 	if (!img)
 		return_error(1);
 	img->pixels = mlx_get_data_addr(win->img, &img->bpp, &img->size_len, &img->endian);
 	ft_memset(img->pixels, 0x0, img->size_len * HEIGHT);
-	point1 = ((HEIGHT / 4) * img->size_len) + (10 * img->bpp/8);
-	point2 = ((HEIGHT / 4) * img->size_len) + (1910 * img->bpp/8);
-	put_map_points(win->map, img);
-	// while (i < img.size_len * HEIGHT / 2)
-	// {
-		// *(unsigned int *)(img.pixels + i + point1) = 0x00FFFF00;
-	// 	i += 4;
-	// }
+	points_to_pixels(win->map);
+	draw_lines(win->map, img);
+
 	mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
 	return (1);
 }
+
+// int	change_projection(int key, t_win *win)
+// {
+// 	if (key == 65434)
+// 		win->map->iso_x_x += 1;
+// 	if (key == 65432)
+// 		win->map->iso_x_x -= 1;
+// 	if (key == 65431)
+// 		win->map->iso_x_y += 1;
+// 	if (key == 65437)
+// 		win->map->iso_x_y -= 1;
+// 	if (key == 65429)
+// 		win->map->iso_y_x += 1;
+// 	if (key == 65430)
+// 		win->map->iso_y_x -= 1;
+// 	if (key == 65465)
+// 		win->map->iso_y_y += 1;
+// 	if (key == 65466)
+// 		win->map->iso_y_y -= 1;
+// 	return (1);
+// }
 
 int main(int argc, char **argv)
 {
@@ -126,10 +212,20 @@ int main(int argc, char **argv)
 	win.map = read_map(argc, argv);
 	win.mlx = mlx_init();
 	ft_add_address(win.mlx, 0);
+	win.map->scale = 3;
+	win.map->z_scale = 2;
+	win.map->step_x = 1;
+	win.map->step_y = 1;
+	win.map->iso_x_x = 1;
+	win.map->iso_x_y = 1;
+	win.map->iso_y_x = 1;
+	win.map->iso_y_y = 1;
 	win.win = mlx_new_window(win.mlx, WIDTH, HEIGHT, "Test: FdF");
 	win.img = mlx_new_image(win.mlx, WIDTH, HEIGHT);
 
-	mlx_loop_hook(win.mlx, draw_to_image, &win);
+	draw_to_image(&win);
+	// mlx_loop_hook(win.mlx, draw_to_image, &win);
 	mlx_key_hook(win.win, key_win, &win);
+	// mlx_key_hook(win.win, change_projection, &win);
 	mlx_loop(win.mlx);
 }

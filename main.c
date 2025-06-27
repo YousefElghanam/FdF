@@ -1,5 +1,14 @@
 #include "fdf.h"
 
+int	close_window(t_win *win)
+{
+	mlx_destroy_image(win->mlx, win->img);
+	mlx_destroy_window(win->mlx, win->win);
+	mlx_destroy_display(win->mlx);
+	return_error(0);
+	return (1);
+}
+
 int	basic_mouse(int key, int x, int y, t_win *win)
 {
 	ft_printf("mouse (%d) used at (%d, %d)\n", key, y, x);
@@ -21,12 +30,7 @@ int	basic_keys(int key, t_win *win)
 {
 	ft_printf("key (%d) pressed\n", key);
 	if (key == 65307)
-	{
-		mlx_destroy_image(win->mlx, win->img);
-		mlx_destroy_window(win->mlx, win->win);
-		mlx_destroy_display(win->mlx);
-		return_error(0);
-	}
+		close_window(win);
 	else if (key == 65364)
 		win->map->pos_y += 50;
 	else if (key == 65363)
@@ -198,6 +202,7 @@ int main(int argc, char **argv)
 	win.img = mlx_new_image(win.mlx, WIDTH, HEIGHT);
 	if (!win.win || !win.img)
 		return_error(1);
+	mlx_hook(win.win, 17, 0, close_window, NULL);
 	draw_to_image(&win);
 	mlx_key_hook(win.win, basic_keys, &win);
 	mlx_mouse_hook(win.win, basic_mouse, &win);

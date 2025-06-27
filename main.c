@@ -1,8 +1,25 @@
 #include "fdf.h"
 
-int	key_win(int key, t_win *win)
+int	basic_mouse(int key, int x, int y, t_win *win)
 {
-	ft_printf("key (%d) was pressed\n", key);
+	ft_printf("mouse (%d) used at (%d, %d)\n", key, y, x);
+	if (key == 4)
+	{
+		win->map->scale += 1;
+		win->map->z_scale += 1;
+	}
+	else if (key == 5)
+	{
+		win->map->scale -= 1;
+		win->map->z_scale -= 1;
+	}
+	draw_to_image(win);
+	return (1);
+}
+
+int	basic_keys(int key, t_win *win)
+{
+	ft_printf("key (%d) pressed\n", key);
 	if (key == 65307)
 	{
 		mlx_destroy_image(win->mlx, win->img);
@@ -10,68 +27,25 @@ int	key_win(int key, t_win *win)
 		mlx_destroy_display(win->mlx);
 		return_error(0);
 	}
-	if (key == 65451)
-	{
-		win->map->scale += 1;
-		win->map->z_scale += 1;
-	}
-	if (key == 65453)
-	{
-		win->map->scale -= 1;
-		win->map->z_scale -= 1;
-	}
-	if (key == 65361)
-		win->map->step_x -= 50;
-	if (key == 65364)
-		win->map->step_y += 50;
-	if (key == 65363)
-		win->map->step_x += 50;
-	if (key == 65362)
-		win->map->step_y -= 50;
-	if (key == 65434)
-
-		win->map->iso_x_x += 1;
-	if (key == 65432)
-		win->map->iso_x_x -= 1;
-	if (key == 65431)
-		win->map->iso_x_y += 1;
-	if (key == 65437)
-		win->map->iso_x_y -= 1;
-	if (key == 65429)
-		win->map->iso_y_x += 1;
-	if (key == 65430)
-		win->map->iso_y_x -= 1;
-	if (key == 119)
-		win->map->iso_y_y += 1;
-	if (key == 115)
-		win->map->iso_y_y -= 1;
+	else if (key == 65364)
+		win->map->pos_y += 50;
+	else if (key == 65363)
+		win->map->pos_x += 50;
+	else if (key == 65361)
+		win->map->pos_x -= 50;
+	else if (key == 65362)
+		win->map->pos_y -= 50;
+	else if (key == 65432)
+		win->map->angle += 15.0f;
+	else if (key == 65430)
+		win->map->angle -= 15.0f;
 	draw_to_image(win);
-	return (0);
-}
-
-int	mouse_win(int button, int x, int y)
-{
-	ft_printf("(%d) key_clicked at %dx%d\n", button, x, y);
 	return (0);
 }
 
 int	in_limit(t_map *map, int x, int y)
 {
 	return (x >= 0 && x < map->width && y >= 0 && y < map->height);
-}
-
-int	sx(int x1, int x2)
-{
-	if (x1 < x2)
-		return (1);
-	return (-1);
-}
-
-int	sy(int y1, int y2)
-{
-	if (y1 < y2)
-		return (1);	
-	return (-1);
 }
 
 void	dir_x(t_line *line)
@@ -91,19 +65,24 @@ void	dir_y(t_line *line)
 	}
 }
 
+void	set_line_data(t_line *line, t_point *p1, t_point *p2)
+{
+	line->x1 = p1->pixel_x;
+	line->y1 = p1->pixel_y;
+	line->x2 = p2->pixel_x;
+	line->y2 = p2->pixel_y;
+	line->dx = abs(line->x2 - p1->pixel_x);
+	line->dy = abs(line->y2 - p1->pixel_y);
+	line->sx = (line->x1 < line->x2) - (line->x1 > line->x2);
+	line->sy = (line->y1 < line->y2) - (line->y1 > line->y2);
+	line->err = line->dx - line->dy;
+}
+
 void	draw_line(t_img *img, t_point *p1, t_point *p2)
 {
 	t_line	line;
 
-	line.x1 = p1->pixel_x;
-	line.y1 = p1->pixel_y;
-	line.x2 = p2->pixel_x;
-	line.y2 = p2->pixel_y;
-	line.dx = abs(line.x2 - p1->pixel_x);
-	line.dy = abs(line.y2 - p1->pixel_y);
-	line.sx = sx(line.x1, line.x2);
-	line.sy = sy(line.y1, line.y2);
-	line.err = line.dx - line.dy;
+	set_line_data(&line, p1, p2);
 	while (1)
 	{
 		if (line.x1 >= 0 && line.x1 < WIDTH && line.y1 >= 0 && line.y1 < HEIGHT)
@@ -139,13 +118,28 @@ void	draw_lines(t_map *map, t_img *img)
 	}
 }
 
+void	set_coordinates(t_map *map, t_co *co, int x, int y)
+{
+	co->raw_x = x * map->scale;
+	co->raw_y = y * map->scale;
+	co->raw_z = map->points[y][x]->z * map->z_scale;
+	co->cx = (map->width * map->scale) * 0.5f;
+	co->cy = (map->height * map->scale) * 0.5f;
+	co->cos = cosf(map->angle * (M_PI / 180.0f));
+	co->sin = sinf(map->angle * (M_PI / 180.0f));
+	co->rot_x = (co->raw_x - co->cx) * co->cos - (co->raw_y - co->cy) * co->sin;
+	co->rot_y = (co->raw_x - co->cx) * co->sin + (co->raw_y - co->cy) * co->cos;
+	co->raw_x = co->rot_x;
+	co->raw_y = co->rot_y;
+	co->iso_x = (co->raw_x - co->raw_y) * cosf(30 * (M_PI / 180.0f));
+	co->iso_y = (co->raw_x + co->raw_y) * sinf(30 * (M_PI / 180.0f)) - co->raw_z;
+}
+
 void	points_to_pixels(t_map *map)
 {
-	t_raw	raw;
+	t_co	co;
 	int		x;
 	int		y;
-	float	iso_x;
-	float	iso_y;
 	
 	y = 0;
 	while (y < map->height)
@@ -153,13 +147,9 @@ void	points_to_pixels(t_map *map)
 		x = 0;
 		while (x < map->width)
 		{
-			raw.x = x * map->scale;
-			raw.y = y * map->scale;
-			raw.z = map->points[y][x]->z * map->z_scale;
-			iso_x = ((raw.x * map->iso_x_x) - (raw.y * map->iso_x_y)) * COS30;
-			iso_y = ((raw.x * map->iso_y_x) + (raw.y * map->iso_y_y)) * SIN30 - raw.z;
-			(map->points[y][x])->pixel_x = (int)iso_x + 200 + map->step_x;
-			(map->points[y][x])->pixel_y = (int)iso_y + 200 + map->step_y;
+			set_coordinates(map, &co, x, y);
+			(map->points[y][x])->pixel_x = (int)co.iso_x + map->pos_x;
+			(map->points[y][x])->pixel_y = (int)co.iso_y + map->pos_y;
 			x++;
 		}
 		y++;
@@ -174,34 +164,23 @@ int	draw_to_image(t_win *win)
 	if (!img)
 		return_error(1);
 	img->pixels = mlx_get_data_addr(win->img, &img->bpp, &img->size_len, &img->endian);
+	if (!img->pixels)
+		return_error(1);
 	ft_memset(img->pixels, 0x0, img->size_len * HEIGHT);
 	points_to_pixels(win->map);
 	draw_lines(win->map, img);
-
 	mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
 	return (1);
 }
 
-// int	change_projection(int key, t_win *win)
-// {
-// 	if (key == 65434)
-// 		win->map->iso_x_x += 1;
-// 	if (key == 65432)
-// 		win->map->iso_x_x -= 1;
-// 	if (key == 65431)
-// 		win->map->iso_x_y += 1;
-// 	if (key == 65437)
-// 		win->map->iso_x_y -= 1;
-// 	if (key == 65429)
-// 		win->map->iso_y_x += 1;
-// 	if (key == 65430)
-// 		win->map->iso_y_x -= 1;
-// 	if (key == 65465)
-// 		win->map->iso_y_y += 1;
-// 	if (key == 65466)
-// 		win->map->iso_y_y -= 1;
-// 	return (1);
-// }
+void	init_map_data(t_map *map)
+{
+	map->scale = 10;
+	map->z_scale = 10;
+	map->pos_x = WIDTH / 2;
+	map->pos_y = HEIGHT / 2;
+	map->angle = 270;
+}
 
 int main(int argc, char **argv)
 {
@@ -211,21 +190,16 @@ int main(int argc, char **argv)
 		return_error(1);
 	win.map = read_map(argc, argv);
 	win.mlx = mlx_init();
+	if (!win.mlx)
+		return_error(1);
 	ft_add_address(win.mlx, 0);
-	win.map->scale = 3;
-	win.map->z_scale = 2;
-	win.map->step_x = 1;
-	win.map->step_y = 1;
-	win.map->iso_x_x = 1;
-	win.map->iso_x_y = 1;
-	win.map->iso_y_x = 1;
-	win.map->iso_y_y = 1;
-	win.win = mlx_new_window(win.mlx, WIDTH, HEIGHT, "Test: FdF");
+	init_map_data(win.map);
+	win.win = mlx_new_window(win.mlx, WIDTH, HEIGHT, "Map viewer");
 	win.img = mlx_new_image(win.mlx, WIDTH, HEIGHT);
-
+	if (!win.win || !win.img)
+		return_error(1);
 	draw_to_image(&win);
-	// mlx_loop_hook(win.mlx, draw_to_image, &win);
-	mlx_key_hook(win.win, key_win, &win);
-	// mlx_key_hook(win.win, change_projection, &win);
+	mlx_key_hook(win.win, basic_keys, &win);
+	mlx_mouse_hook(win.win, basic_mouse, &win);
 	mlx_loop(win.mlx);
 }

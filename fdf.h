@@ -22,12 +22,20 @@ typedef struct s_line
 	int	e2;
 }	t_line;
 
-typedef struct s_raw
+typedef struct s_co
 {
-	float	x;
-	float	y;
-	float	z;
-}	t_raw;
+	float	raw_x;
+	float	raw_y;
+	float	raw_z;
+	float	cx;
+	float	cy;
+	float	rot_x;
+	float	rot_y;
+	float	cos;
+	float	sin;
+	float	iso_x;
+	float	iso_y;
+}	t_co;
 
 typedef struct s_point
 {
@@ -45,12 +53,9 @@ typedef struct s_map
 	int		width;
 	int		scale;
 	int		z_scale;
-	int		step_x;
-	int		step_y;
-	int		iso_x_x;
-	int		iso_x_y;
-	int		iso_y_x;
-	int		iso_y_y;
+	float	angle;
+	int		pos_x;
+	int		pos_y;
 	t_point	***points;
 }	t_map;
 

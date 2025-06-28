@@ -16,16 +16,16 @@ int	wheel_zoom(int key, int x, int y, t_win *win)
 	ft_printf("mouse clicked at (%d, %d)\n", y, x);
 	if (key == 4)
 	{
-		win->map->scale += 0.2;
-		win->map->z_scale += 0.2;
+		win->map->scale += 1;
+		win->map->z_scale += 1;
 	}
 	else if (key == 5)
 	{
-		win->map->scale -= 0.2;
-		win->map->z_scale -= 0.2;
+		win->map->scale -= 1;
+		win->map->z_scale -= 1;
 	}
 	draw_to_image(win);
-	return (0);
+	return (1);
 }
 
 int	mouse_press(int key, int x, int y, t_win *win)
@@ -47,7 +47,7 @@ int	mouse_press(int key, int x, int y, t_win *win)
 		win->map->org_angle = win->map->angle;
 	}
 	wheel_zoom(key, x, y, win);
-	return (0);
+	return (1);
 }
 
 int	mouse_drag(int x, int y, t_win *win)
@@ -63,7 +63,7 @@ int	mouse_drag(int x, int y, t_win *win)
 		win->map->angle = win->map->org_angle + (win->map->mouse_pos_x - x) / 15;
 		draw_to_image(win);
 	}
-	return (0);
+	return (1);
 }
 
 int	mouse_release(int key, int x, int y, t_win *win)
@@ -73,7 +73,7 @@ int	mouse_release(int key, int x, int y, t_win *win)
 		win->map->drag_move = 0;
 	if (key == 3)
 		win->map->drag_rotate = 0;
-	return (0);
+	return (1);
 }
 
 int	close_window(t_win *win)
@@ -83,7 +83,7 @@ int	close_window(t_win *win)
 	mlx_destroy_window(win->mlx, win->win);
 	mlx_destroy_display(win->mlx);
 	return_error(0);
-	return (0);
+	return (1);
 }
 
 int	move_rotate_keys(int key, t_win *win)
@@ -161,6 +161,23 @@ void	draw_line(t_img *img, t_point *p1, t_point *p2)
 	}
 }
 
+// void	draw_circle_point(t_img *img, t_point *p)
+// {
+// 	*(unsigned int *)(img->pixels + p->pixel_y * img->size_len + p->pixel_x * img->bpp / 8) = 0xFF0000;
+// 	*(unsigned int *)(img->pixels + (p->pixel_y + 0) * img->size_len + (p->pixel_x + 1) * img->bpp / 8) = 0xFF0000;
+// 	*(unsigned int *)(img->pixels + (p->pixel_y + 1) * img->size_len + (p->pixel_x + 1) * img->bpp / 8) = 0xFF0000;
+// 	*(unsigned int *)(img->pixels + (p->pixel_y - 1) * img->size_len + (p->pixel_x + 1) * img->bpp / 8) = 0xFF0000;
+// 	*(unsigned int *)(img->pixels + (p->pixel_y + 0) * img->size_len + (p->pixel_x - 1) * img->bpp / 8) = 0xFF0000;
+// 	*(unsigned int *)(img->pixels + (p->pixel_y + 1) * img->size_len + (p->pixel_x - 1) * img->bpp / 8) = 0xFF0000;
+// 	*(unsigned int *)(img->pixels + (p->pixel_y - 1) * img->size_len + (p->pixel_x - 1) * img->bpp / 8) = 0xFF0000;
+// 	*(unsigned int *)(img->pixels + (p->pixel_y + 1) * img->size_len + (p->pixel_x + 0) * img->bpp / 8) = 0xFF0000;
+// 	*(unsigned int *)(img->pixels + (p->pixel_y - 1) * img->size_len + (p->pixel_x + 0) * img->bpp / 8) = 0xFF0000;
+// 	*(unsigned int *)(img->pixels + (p->pixel_y + 0) * img->size_len + (p->pixel_x + 2) * img->bpp / 8) = 0xFF0000;
+// 	*(unsigned int *)(img->pixels + (p->pixel_y + 0) * img->size_len + (p->pixel_x - 2) * img->bpp / 8) = 0xFF0000;
+// 	*(unsigned int *)(img->pixels + (p->pixel_y + 2) * img->size_len + (p->pixel_x + 0) * img->bpp / 8) = 0xFF0000;
+// 	*(unsigned int *)(img->pixels + (p->pixel_y - 2) * img->size_len + (p->pixel_x + 0) * img->bpp / 8) = 0xFF0000;
+// }
+
 void	draw_map(t_map *map, t_img *img)
 {
 	int	x;
@@ -172,7 +189,7 @@ void	draw_map(t_map *map, t_img *img)
 		x = 0;
 		while (x < map->width)
 		{
-			// draw_point(img, map->points[y][x]);
+			// draw_circle_point(img, map->points[y][x]);
 			if (in_limit(map, x + 1, y))
 				draw_line(img, map->points[y][x], map->points[y][x + 1]);
 			if (in_limit(map, x, y + 1))
@@ -259,21 +276,13 @@ void	clear_img(t_img *img)
 
 int	draw_to_image(t_win *win)
 {
-	clear_img(win->img);
+	ft_printf("img:%p == b_img:%p\n", win->img, win->b_img);
+	clear_img(win->b_img);
 	points_to_pixels(win->map);
-	draw_map(win->map, win->img);
-	mlx_put_image_to_window(win->mlx, win->win, win->img->ptr, 0, 0);
-	return (0);
-}
-
-void	all_hooks(t_win *win)
-{
-	mlx_key_hook(win->win, move_rotate_keys, win);
-	mlx_mouse_hook(win->win, wheel_zoom, win);
-	mlx_hook(win->win, 4, (1L<<2), mouse_press, win);
-	mlx_hook(win->win, 6, (1L<<6), mouse_drag, win);
-	mlx_hook(win->win, 5, (1L<<3), mouse_release, win);
-	mlx_hook(win->win, 17, 0, close_window, win);
+	draw_map(win->map, win->b_img);
+	mlx_put_image_to_window(win->mlx, win->win, win->b_img->ptr, 0, 0);
+	swap_imgs(win);
+	return (1);
 }
 
 int main(int argc, char **argv)
@@ -292,7 +301,13 @@ int main(int argc, char **argv)
 	if (!win.win)
 		return_error(1);
 	init_imgs(&win);
-	draw_to_image(&win);
-	all_hooks(&win);
+	// draw_to_image(&win);
+	mlx_key_hook(win.win, move_rotate_keys, &win);
+	mlx_mouse_hook(win.win, wheel_zoom, &win);
+	mlx_loop_hook(win.mlx, draw_to_image, &win);
+	mlx_hook(win.win, 4, (1L<<2), mouse_press, &win);
+	mlx_hook(win.win, 6, (1L<<6), mouse_drag, &win);
+	mlx_hook(win.win, 5, (1L<<3), mouse_release, &win);
+	mlx_hook(win.win, 17, 0, close_window, &win);
 	mlx_loop(win.mlx);
 }

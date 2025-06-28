@@ -4,15 +4,15 @@ CC = cc
 
 OBJ_DIR = objects/
 
-INCLUDE = -I./minilibx-linux
+LIBS = -lmlx -lXext -lX11 -lm
 
-LIBS = -L./minilibx-linux -lmlx -lXext -lX11 -lm
-
-CFLAGS = -Wall -Wextra -Werror -g $(INCLUDE)
+CFLAGS = -Wall -Wextra -Werror
 
 HEADERS = fdf.h libft/libft.h
 
 SOURCES = main.c utils.c validate_map.c read_map.c parse_map.c
+
+BONUS = main_bonus.c
 
 OBJECTS = $(SOURCES:%.c=$(OBJ_DIR)%.o)
 

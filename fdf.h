@@ -1,12 +1,16 @@
-#include "libft/libft.h"
-#include "mlx.h"
-#include "math.h"
-#include "fcntl.h"
+#ifndef FDF_H
+# define FDF_H
 
-#define WIDTH 1920
-#define HEIGHT 1080
-#define COS30 0.8660254f
-#define SIN30 0.5f
+# include "libft/libft.h"
+# include "mlx.h"
+# include "math.h"
+# include "fcntl.h"
+
+# define WIDTH 1920
+# define HEIGHT 1080
+# define PI 3.14159265358979323846
+# define COS30 0.8660254f
+# define SIN30 0.5f
 
 typedef struct s_line
 {
@@ -51,16 +55,24 @@ typedef struct s_map
 {
 	int		height;
 	int		width;
-	int		scale;
-	int		z_scale;
+	float	scale;
+	float	z_scale;
 	float	angle;
+	float	org_angle;
 	int		pos_x;
 	int		pos_y;
+	int		mouse_pos_x;
+	int		mouse_pos_y;
+	int		org_pos_x;
+	int		org_pos_y;
+	int		drag_move;
+	int		drag_rotate;
 	t_point	***points;
 }	t_map;
 
 typedef struct s_img
 {
+	void	*ptr;
 	char	*pixels;
 	int		bpp;
 	int		size_len;
@@ -72,6 +84,7 @@ typedef struct s_win
 	void	*mlx;
 	void	*win;
 	t_img	*img;
+	t_img	*b_img;
 	t_map	*map;
 }	t_win;
 
@@ -92,3 +105,5 @@ size_t	validate_map(int fd);
 
 /* main.c */
 int	draw_to_image(t_win *win);
+
+#endif

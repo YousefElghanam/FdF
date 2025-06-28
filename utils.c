@@ -1,10 +1,10 @@
 #include "fdf.h"
 
-void	*check_add_ptr(void *ptr, int list_num, int error_num)
+void	*check_add_ptr(void *ptr, int ptrs_list, int error_num)
 {
 	if (!ptr)
 		return_error(error_num);
-	ft_add_address(ptr, list_num);
+	ft_add_address(ptr, ptrs_list);
 	return (ptr);
 }
 
@@ -57,15 +57,6 @@ int	is_valid_hex(char *str)
 	return (1);
 }
 
-void	validate_color_hex(char *str, size_t strlen)
-{
-	char	*color;
-
-	color = str + strlen + 1;
-	if (!is_valid_hex(color))
-		return_error(4);
-}
-
 int	is_valid_point(char *str)
 {
 	size_t	i;
@@ -80,8 +71,8 @@ int	is_valid_point(char *str)
 	while (i < strlen)
 		if (!ft_isdigit(str[i++]))
 			return (0);
-	if (str[i] == ',')
-		validate_color_hex(str, strlen);
+	if (str[i] == ',' && !is_valid_hex(str + strlen + 1))
+		return_error(4);
 	if (ft_atoi_but_better(str) == 2147483648)
 		return (0);
 	return (1);

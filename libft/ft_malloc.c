@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 12:06:43 by jel-ghna          #+#    #+#             */
-/*   Updated: 2025/06/22 16:40:28 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2025/06/28 19:13:30 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,10 @@ void	return_error(int state, ...)
 {
 	if (state == 1)
 		write(2, "Error\n", 6);
-	else if (state == 2)
-		write(1, "KO\n", 3);
 	else if (state == 3)
 		write(1, "Invalid Map File.\n", 17);
 	else if (state == 4)
-		write(1, "Invalid Map\n", 12);
+		write(1, "Invalid Map.\n", 13);
 	else if (state == 5)
 		write(1, "No arguments given. Usage: (./fdf \"map.fdf\")\n", 45);
 	ft_lstclear(ft_alloc_list(0), &ft_delete);

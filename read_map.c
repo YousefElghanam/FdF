@@ -1,6 +1,5 @@
 #include "fdf.h"
 
-// TODO: GIVE "HOW TO USE PROGRAM" ERROR ON UNEXPECTED INPUT
 static int	open_validate_file(int argc, char **argv)
 {
 	size_t	file_len;
@@ -21,25 +20,6 @@ static int	open_validate_file(int argc, char **argv)
 	return(fd);
 }
 
-void	test_map_parsing(t_map *map)
-{
-	int	i;
-	int	x;
-
-	i = 0;
-	while(i < map->height)
-	{
-		x = 0;
-		while (x < map->width)
-		{
-			ft_printf("point(%d:%d):\ny:%d\nx:%d\nz:%d\ncolor:%d", i, x, (map->points[i])[x]->y, (map->points[i])[x]->x, (map->points[i])[x]->z, (map->points[i])[x]->color);
-			ft_printf("\n");
-			x++;
-		}
-		i++;
-	}
-}
-
 t_map	*read_map(int argc, char **argv)
 {
 	t_map	*map;
@@ -52,9 +32,7 @@ t_map	*read_map(int argc, char **argv)
 	if (!map)
 		return_error(1);
 	close(fd);
-	// ft_printf("line count is: %d\n", line_count);
 	fd = open_parse_map(map, argv, line_count);
 	close(fd);
-	// test_map_parsing(&map);
 	return(map);
 }

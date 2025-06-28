@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:54:02 by josefelghna       #+#    #+#             */
-/*   Updated: 2025/04/22 13:19:36 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2025/06/28 15:53:52 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ void	*ft_memset(void *s, int c, size_t n)
 		*p++ = (unsigned char)c;
 	return (s);
 }
+
+// THIS FT_MEMSET IS VERY SLOW. CONSIDER CHANGING IT...
+// MAKE IT WRITE 8 by 8 BYTES
 
 // #include <stdio.h>
 

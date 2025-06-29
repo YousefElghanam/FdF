@@ -58,7 +58,7 @@ static void	store_points(t_map *map, int fd, size_t line_count)
 	{
 		line = get_next_line(fd);
 		line[ft_strlen(line) - 1] = '\0';
-		check_add_ptr(line, 1, 1);
+		ft_check_add(line, 1, 1);
 		store_points_from_line(map, y, line);
 		y++;
 	}

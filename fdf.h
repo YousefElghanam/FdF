@@ -59,6 +59,8 @@ typedef struct s_map
 	float	z_scale;
 	float	angle;
 	float	org_angle;
+	float	c_angle_x;
+	float	c_angle_y;
 	int		pos_x;
 	int		pos_y;
 	int		mouse_pos_x;
@@ -91,7 +93,7 @@ typedef struct s_win
 /* utils.c */
 int		is_valid_point(char *str);
 size_t	count_strings(char **arr);
-void	*check_add_ptr(void *ptr, int list_num, int error_num);
+void	*ft_check_add(void *ptr, int list_num, int error_num);
 void	add_split_ptrs(char **arr, int list_num);
 
 /* read_map.c */

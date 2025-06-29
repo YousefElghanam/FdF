@@ -39,7 +39,7 @@ size_t	validate_map(int fd)
 	if (!ft_alloc_list(1))
 		return_error(1);
 	line = get_next_line(fd);
-	check_add_ptr(line, 1, 1);
+	ft_check_add(line, 1, 1);
 	while (line)
 	{
 		line_count++;

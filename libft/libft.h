@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josefelghnam <josefelghnam@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 21:54:09 by josefelghna       #+#    #+#             */
-/*   Updated: 2025/06/24 15:30:27 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:57:49 by josefelghna      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,16 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
+/* ft_malloc.c */
 void	*ft_malloc(size_t size, int list_num);
 void	ft_add_address(void *ptr, int list_num);
 t_list	**ft_alloc_list(int list_num);
 void	ft_delete(void *ptr);
 void	return_error(int state, ...);
+
+/* ft_malloc_utils.c */
+void	*ft_check_add(void *ptr, int ptrs_list, int error_num);
+void	*ft_check(void *ptr, int error_num);
 
 char	*get_next_line(int fd);
 int		ft_printf(const char *format, ...);

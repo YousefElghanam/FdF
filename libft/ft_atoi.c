@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josefelghnam <josefelghnam@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 20:17:04 by josefelghna       #+#    #+#             */
-/*   Updated: 2025/06/24 17:54:23 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2025/06/29 15:57:58 by josefelghna      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,10 @@ int	ft_hextoi_base(char *str, char *base)
 	int		j;
 	int		sign;
 	int		res;
-	char	*upper_base;
 
 	sign = 1;
 	i = -1;
 	res = 0;
-	upper_base = "0123456789ABCDEF";
 	if ((str[++i] == '-' || str[i] == '+'))
 		if (str[i++] == '-')
 			sign = -sign;

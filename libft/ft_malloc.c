@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
+/*   By: josefelghnam <josefelghnam@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 12:06:43 by jel-ghna          #+#    #+#             */
-/*   Updated: 2025/06/28 19:13:30 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:52:16 by josefelghna      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-void	ft_delete(void *ptr)
-{
-	free(ptr);
-}
 
 // TODO: RECHECK WHETER TO OUTPUT TO STDERR OR STDOUT
 void	return_error(int state, ...)
@@ -27,7 +22,7 @@ void	return_error(int state, ...)
 	else if (state == 4)
 		write(1, "Invalid Map.\n", 13);
 	else if (state == 5)
-		write(1, "No arguments given. Usage: (./fdf \"map.fdf\")\n", 45);
+		write(2, "No arguments given. Usage: (./fdf \"map.fdf\")\n", 45);
 	ft_lstclear(ft_alloc_list(0), &ft_delete);
 	ft_lstclear(ft_alloc_list(1), &ft_delete);
 	free(ft_alloc_list(0));
@@ -49,21 +44,6 @@ t_list	**ft_alloc_list(int list_num)
 		*(ptr[list_num]) = NULL;
 	}
 	return (ptr[list_num]);
-}
-
-void	ft_add_address(void *ptr, int list_num)
-{
-	void	*node;
-	t_list	**list;
-
-	list = ft_alloc_list(list_num);
-	node = ft_lstnew(ptr);
-	if (!node)
-	{
-		ft_lstclear(list, &ft_delete);
-		return_error(1);
-	}
-	ft_lstadd_back(list, node);
 }
 
 void	*ft_malloc(size_t size, int list_num)

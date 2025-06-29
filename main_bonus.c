@@ -7,6 +7,8 @@ void	init_map_data(t_map *map)
 	map->pos_x = WIDTH / 2;
 	map->pos_y = HEIGHT / 2;
 	map->angle = 270;
+	map->c_angle_x = 30;
+	map->c_angle_y = 30;
 	map->drag_move = 0;
 	map->drag_rotate = 0;
 }
@@ -91,18 +93,22 @@ int	move_rotate_keys(int key, t_win *win)
 	ft_printf("key (%d) pressed\n", key);
 	if (key == 65307)
 		close_window(win);
-	else if (key == 65361)
-		win->map->pos_x += 50;
-	else if (key == 65362)
-		win->map->pos_y += 50;
-	else if (key == 65364)
-		win->map->pos_y -= 50;
-	else if (key == 65363)
-		win->map->pos_x -= 50;
+	// else if (key == 65361)
+	// 	win->map->pos_x += 50;
+	// else if (key == 65362)
+	// 	win->map->pos_y += 50;
+	// else if (key == 65364)
+	// 	win->map->pos_y -= 50;
+	// else if (key == 65363)
+	// 	win->map->pos_x -= 50;
 	else if (key == 65432)
-		win->map->angle += 15.0f;
+		win->map->c_angle_x += 15.0f;
 	else if (key == 65430)
-		win->map->angle -= 15.0f;
+		win->map->c_angle_x -= 15.0f;
+	else if (key == 65362)
+		win->map->c_angle_y += 15.0f;
+	else if (key == 65364)
+		win->map->c_angle_y -= 15.0f;
 	draw_to_image(win);
 	return (0);
 }
@@ -211,10 +217,8 @@ void	set_coordinates(t_map *map, t_co *co, int x, int y)
 	co->sin = sinf(map->angle * (PI / 180.0f));
 	co->rot_x = (co->raw_x - co->cx) * co->cos - (co->raw_y - co->cy) * co->sin;
 	co->rot_y = (co->raw_x - co->cx) * co->sin + (co->raw_y - co->cy) * co->cos;
-	co->raw_x = co->rot_x;
-	co->raw_y = co->rot_y;
-	co->iso_x = (co->raw_x - co->raw_y) * cosf(30 * (PI / 180.0f));
-	co->iso_y = (co->raw_x + co->raw_y) * sinf(30 * (PI / 180.0f)) - co->raw_z;
+	co->iso_x = (co->rot_x - co->rot_y) * cosf(map->c_angle_x * (PI / 180.0f));
+	co->iso_y = (co->rot_x + co->rot_y) * sinf(map->c_angle_y * (PI / 180.0f)) - co->raw_z;
 }
 
 void	points_to_pixels(t_map *map)
@@ -285,6 +289,18 @@ int	draw_to_image(t_win *win)
 	return (1);
 }
 
+void	all_hooks(t_win *win)
+{
+	// draw_to_image(&win);
+	mlx_loop_hook(win->win, draw_to_image, win);
+	mlx_key_hook(win->win, move_rotate_keys, win);
+	mlx_mouse_hook(win->win, wheel_zoom, win);
+	mlx_hook(win->win, 4, (1L<<2), mouse_press, win);
+	mlx_hook(win->win, 6, (1L<<6), mouse_drag, win);
+	mlx_hook(win->win, 5, (1L<<3), mouse_release, win);
+	mlx_hook(win->win, 17, 0, close_window, win);
+}
+
 int main(int argc, char **argv)
 {
 	t_win	win;
@@ -301,13 +317,6 @@ int main(int argc, char **argv)
 	if (!win.win)
 		return_error(1);
 	init_imgs(&win);
-	// draw_to_image(&win);
-	mlx_key_hook(win.win, move_rotate_keys, &win);
-	mlx_mouse_hook(win.win, wheel_zoom, &win);
-	mlx_loop_hook(win.mlx, draw_to_image, &win);
-	mlx_hook(win.win, 4, (1L<<2), mouse_press, &win);
-	mlx_hook(win.win, 6, (1L<<6), mouse_drag, &win);
-	mlx_hook(win.win, 5, (1L<<3), mouse_release, &win);
-	mlx_hook(win.win, 17, 0, close_window, &win);
+	all_hooks(&win);
 	mlx_loop(win.mlx);
 }

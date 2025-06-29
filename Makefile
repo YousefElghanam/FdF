@@ -10,7 +10,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 HEADERS = fdf.h libft/libft.h
 
-SOURCES = main.c utils.c validate_map.c read_map.c parse_map.c
+SOURCES = main_bonus.c utils.c validate_map.c read_map.c parse_map.c
 
 BONUS = main_bonus.c
 

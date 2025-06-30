@@ -24,6 +24,10 @@ typedef struct s_line
 	int	dy;
 	int	err;
 	int	e2;
+	int	color;
+	int	max_steps;
+	int	step;
+	int	t;
 }	t_line;
 
 typedef struct s_co

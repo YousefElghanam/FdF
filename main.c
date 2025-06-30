@@ -66,6 +66,18 @@ void	dir_y(t_line *line)
 	}
 }
 
+unsigned int	calc_color(int c1, int c2, float t)
+{
+	int	r;
+	int	g;
+	int	b;
+	
+	r = ((1 - t) * ((c1 >> 16) & 0xFF)) + (t * ((c2 >> 16) & 0xFF));
+	g = ((1 - t) * ((c1 >> 8) & 0xFF)) + (t * ((c2 >> 8) & 0xFF));
+	b = ((1 - t) * ((c1) & 0xFF)) + (t * ((c2) & 0xFF));
+	return ((r << 16) | (g << 8) | b);
+}
+
 void	set_line_data(t_line *line, t_point *p1, t_point *p2)
 {
 	line->x1 = p1->pixel_x;
@@ -82,6 +94,11 @@ void	set_line_data(t_line *line, t_point *p1, t_point *p2)
 		line->sy = 1;
 	else
 		line->sy = -1;
+	if (line->dx > line->dy)
+		line->max_steps = line->dx;
+	else
+		line->max_steps = line->dy;
+	line->step = 0;
 	line->err = line->dx - line->dy;
 }
 
@@ -93,14 +110,21 @@ void	draw_line(t_img *img, t_point *p1, t_point *p2)
 	while (1)
 	{
 		if (line.x1 >= 0 && line.x1 < WIDTH && line.y1 >= 0 && line.y1 < HEIGHT)
+		{
+			if (line.max_steps)
+				line.t = (float)line.step / line.max_steps;
+			else
+				line.t = 0.0f;
 			*(unsigned int *)(img->pixels
 					+ line.y1 * img->size_len
-					+ line.x1 * (img->bpp / 8)) = p1->color;
+					+ line.x1 * (img->bpp / 8)) = calc_color(p1->color, p2->color, line.t);
+		}
 		if (line.x1 == line.x2 && line.y1 == line.y2)
 			break ;
 		line.e2 = 2 * line.err;
 		dir_x(&line);
 		dir_y(&line);
+		line.step++;
 	}
 }
 
@@ -161,15 +185,6 @@ void	points_to_pixels(t_map *map)
 		}
 		y++;
 	}
-}
-
-void	swap_imgs(t_win *win)
-{
-	t_img	*tmp;
-
-	tmp = win->img;
-	win->img = win->b_img;
-	win->b_img = tmp;
 }
 
 void	init_imgs(t_win *win)

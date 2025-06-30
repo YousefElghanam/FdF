@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: josefelghnam <josefelghnam@student.42.f    +#+  +:+       +#+        */
+/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/15 12:06:43 by jel-ghna          #+#    #+#             */
-/*   Updated: 2025/06/29 21:52:16 by josefelghna      ###   ########.fr       */
+/*   Updated: 2025/06/30 19:35:06 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	return_error(int state, ...)
 	if (state == 1)
 		write(2, "Error\n", 6);
 	else if (state == 3)
-		write(1, "Invalid Map File.\n", 17);
+		write(1, "Invalid Map File.\n", 18);
 	else if (state == 4)
 		write(1, "Invalid Map.\n", 13);
 	else if (state == 5)

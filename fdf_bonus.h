@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fdf.h                                              :+:      :+:    :+:   */
+/*   fdf_bonus.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/30 22:30:45 by jel-ghna          #+#    #+#             */
-/*   Updated: 2025/06/30 22:30:56 by jel-ghna         ###   ########.fr       */
+/*   Created: 2025/06/30 22:23:02 by jel-ghna          #+#    #+#             */
+/*   Updated: 2025/06/30 22:23:04 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FDF_H
-# define FDF_H
+#ifndef FDF_BONUS_H
+# define FDF_BONUS_H
 
 # include "libft/libft.h"
 # include "mlx.h"
@@ -121,10 +121,6 @@ int				open_parse_map(t_map *map, char **argv, size_t line_count);
 /* validate_map.c */
 size_t			validate_map(int fd);
 
-/* hooks.c */
-int				handle_mouse_zoom(int key, int x, int y, t_win *win);
-int				handle_keys(int key, t_win *win);
-
 /* draw_map.c */
 void			draw_map(t_map *map, t_img *img);
 
@@ -135,10 +131,17 @@ void			dir_y(t_line *line);
 unsigned int	calc_color(int c1, int c2, float t);
 void			clear_img(t_img *img);
 
-/* draw.c */
+/* hooks_bonus.c */
+int				wheel_zoom(int key, int x, int y, t_win *win);
+int				mouse_press(int key, int x, int y, t_win *win);
+int				mouse_drag(int x, int y, t_win *win);
+int				mouse_release(int key, int x, int y, t_win *win);
+int				move_rotate_keys(int key, t_win *win);
+
+/* draw_bonus.c */
 int				draw_to_image(t_win *win);
 
-/* main.c */
+/* main_bonus.c */
 int				close_window(t_win *win);
 
 #endif

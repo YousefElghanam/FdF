@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_map.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/30 22:28:58 by jel-ghna          #+#    #+#             */
+/*   Updated: 2025/06/30 22:28:58 by jel-ghna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 static t_point	*new_point(size_t x, size_t y, char *num_string)
@@ -41,7 +53,6 @@ static void	store_points_from_line(t_map *map, size_t y, char *line)
 	{
 		point = new_point(x, y, string_arr[x]);
 		point_arr[x] = point;
-		// ft_printf("point(%d,%d)\nx:%d\ny:%d\nz:%d\ncolor:%d\n\n", y, x, point->x, point->y, point->z, point->color);
 		x++;
 	}
 	(map->points)[y] = point_arr;

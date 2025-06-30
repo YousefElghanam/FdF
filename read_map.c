@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_map.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/30 22:31:16 by jel-ghna          #+#    #+#             */
+/*   Updated: 2025/06/30 22:31:16 by jel-ghna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 static int	open_validate_file(int argc, char **argv)
@@ -17,7 +29,7 @@ static int	open_validate_file(int argc, char **argv)
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
 		return_error(3);
-	return(fd);
+	return (fd);
 }
 
 t_map	*read_map(int argc, char **argv)
@@ -34,5 +46,5 @@ t_map	*read_map(int argc, char **argv)
 	close(fd);
 	fd = open_parse_map(map, argv, line_count);
 	close(fd);
-	return(map);
+	return (map);
 }

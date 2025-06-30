@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 22:30:19 by jel-ghna          #+#    #+#             */
-/*   Updated: 2025/06/30 22:32:28 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2025/06/30 22:38:01 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	main(int argc, char **argv)
 	win.win = ft_check(mlx_new_window(win.mlx, WIDTH, HEIGHT, "FdF"), 1);
 	init_map_data(win.map);
 	init_imgs(&win);
+	draw_to_image(&win);
 	all_hooks(&win);
 	mlx_loop(win.mlx);
 }

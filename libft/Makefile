@@ -24,14 +24,17 @@ all: $(NAME)
 $(NAME): $(OBJECTS)
 	ar rcs $(NAME) $(OBJECTS)
 
-$(OBJ_DIR)%.o: %.c
+$(OBJ_DIR)%.o: %.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
+$(OBJ_DIR):
+	mkdir -p $@
+
 clean:
-	rm -rf $(OBJECTS)
+	rm -rf $(OBJ_DIR)
 
 fclean:
-	rm -rf $(OBJECTS)
+	rm -rf $(OBJ_DIR)
 	rm -rf $(NAME)
 
 re: fclean all

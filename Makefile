@@ -12,7 +12,7 @@ LIBS = -lmlx -lXext -lX11 -lm
 
 CFLAGS = -Wall -Wextra -Werror
 
-HEADERS = fdf.h libft/libft.h
+HEADERS = fdf.h fdf_bonus.h libft/libft.h
 
 SOURCES = parse_utils.c validate_map.c read_map.c parse_map.c draw_map.c draw_utils.c \
 			main.c hooks.c draw.c
@@ -28,7 +28,7 @@ LIBFT = libft/libft.a
 
 all: $(NAME) $(NAME_BONUS)
 
-$(NAME): $(LIBFT) $(OBJECTS) $(HEADERS)
+$(NAME): $(LIBFT) $(OBJECTS)
 	$(CC) $(OBJECTS) $(LIBFT) $(LIBS) -o $(NAME)
 
 $(LIBFT):
@@ -42,7 +42,7 @@ $(OBJ_DIR):
 
 bonus: $(NAME_BONUS)
 
-$(NAME_BONUS): $(LIBFT) $(OBJECTS_BONUS) fdf_bonus.h
+$(NAME_BONUS): $(LIBFT) $(OBJECTS_BONUS)
 	$(CC) $(OBJECTS_BONUS) $(LIBFT) $(LIBS) -o $(NAME_BONUS)
 
 $(OBJ_DIR_BONUS)%.o: %.c | $(OBJ_DIR_BONUS)

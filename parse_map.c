@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 22:28:58 by jel-ghna          #+#    #+#             */
-/*   Updated: 2025/06/30 22:28:58 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2025/07/01 13:05:00 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static void	store_points_from_line(t_map *map, size_t y, char *line)
 static void	store_points(t_map *map, int fd, size_t line_count)
 {
 	char	*line;
+	size_t	line_len;
 	size_t	y;
 
 	y = 0;
@@ -68,7 +69,9 @@ static void	store_points(t_map *map, int fd, size_t line_count)
 	while (y < line_count)
 	{
 		line = get_next_line(fd);
-		line[ft_strlen(line) - 1] = '\0';
+		line_len = ft_strlen(line);
+		if (line[line_len - 1] == '\n')
+			line[line_len - 1] = '\0';
 		ft_check_add(line, 1, 1);
 		store_points_from_line(map, y, line);
 		y++;

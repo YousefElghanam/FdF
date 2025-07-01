@@ -6,7 +6,7 @@
 /*   By: jel-ghna <jel-ghna@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 22:28:35 by jel-ghna          #+#    #+#             */
-/*   Updated: 2025/06/30 22:28:35 by jel-ghna         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:57:37 by jel-ghna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ size_t	validate_map(int fd)
 		line_count++;
 		line_len = ft_strlen(line);
 		validate_line_len(line_len);
-		line[line_len - 1] = '\0';
+		if (line[line_len - 1] == '\n')
+			line[line_len - 1] = '\0';
 		split_validate_line(line, &base_width);
 		line = get_next_line(fd);
 		ft_add_address(line, 1);
